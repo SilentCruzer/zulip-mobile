@@ -29,7 +29,12 @@ type Props = $ReadOnly<{|
       but not the prefix. Eg. **FullName**, **StreamName**.
    * @param lastWordPrefix The type of the autocompletion - valid values are keys of 'prefixToComponent'.
    */
-  onAutocomplete: (input: string, completion: string, lastWordPrefix: string) => void,
+  onAutocomplete: (
+    input: string,
+    completion: string,
+    lastWordPrefix: string,
+    selection: InputSelection,
+  ) => void,
 |}>;
 
 export default function AutocompleteView(props: Props): Node {
@@ -37,9 +42,13 @@ export default function AutocompleteView(props: Props): Node {
 
   const handleAutocomplete = useCallback(
     (autocomplete: string) => {
-      const { lastWordPrefix } = getAutocompleteFilter(text, selection);
+      const { lastWordPrefix, filter } = getAutocompleteFilter(text, selection);
       const newText = getAutocompletedText(text, autocomplete, selection);
-      onAutocomplete(newText, autocomplete, lastWordPrefix);
+      const finalPosition = selection.start - filter.length + autocomplete.length + 1;
+      onAutocomplete(newText, autocomplete, lastWordPrefix, {
+        start: finalPosition,
+        end: finalPosition,
+      });
     },
     [onAutocomplete, selection, text],
   );

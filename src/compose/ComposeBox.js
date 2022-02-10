@@ -329,6 +329,7 @@ class ComposeBoxInner extends PureComponent<Props, State> {
     completedText: string,
     completion: string,
     lastWordPrefix: string,
+    selection: InputSelection,
   ) => {
     this.setMessageInputValue(completedText);
 
@@ -337,6 +338,7 @@ class ComposeBoxInner extends PureComponent<Props, State> {
       // eslint-disable-next-line no-unused-expressions
       this.mentionWarnings.current?.handleMentionSubscribedCheck(completion);
     }
+    this.setState({ selection });
   };
 
   handleMessageSelectionChange = (event: {
@@ -638,6 +640,7 @@ class ComposeBoxInner extends PureComponent<Props, State> {
               onBlur={this.handleMessageBlur}
               onChangeText={this.handleMessageChange}
               onFocus={this.handleMessageFocus}
+              selection={selection}
               onSelectionChange={this.handleMessageSelectionChange}
               onTouchStart={this.handleInputTouchStart}
             />
